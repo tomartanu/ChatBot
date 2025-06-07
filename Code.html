@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://127.0.0.1:5500/Chatbot.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+        display: flex;
+        justify-content:space-around;
+        background-image: url(chatBG.avif);
+        background-repeat: no-repeat;
+        background-size: cover;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+
+    .chatbox {
+        overflow: auto;
+        height: 600px;
+        width: 400px;
+        border-radius: 7px;
+        /* background-color:rgb(23, 15, 16); */
+        box-shadow: 0px 0px 10px 3px rgb(249, 243, 243);
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+
+       
+    }
+
+    .chatbox h1 {
+        font-size: 25px;
+        box-shadow: 0px 0px 20px 3px rgb(255, 255, 255);
+        text-align: center;
+        margin-bottom: 10px;
+        color: white;
+        font-weight: bolder;
+    
+    }
+
+    .input {
+        display: flex;
+        border: 2px solid black;
+        margin-top: 500px;
+        border-radius: 5px;
+        position: sticky;
+        bottom: 4px;
+    }
+
+    .input input {
+        flex: 1;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .user-message {
+        align-self: flex-end;
+        max-width: 60%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: rgb(89, 103, 212);
+        color: white;
+        border-radius: 5px;
+    }
+
+    .bot-message {
+        align-self: flex-start;
+        max-width: 60%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: rgb(224, 238, 239);
+        color: black;
+        box-shadow: 0px 0px 6px rgb(243, 166, 166);
+        border-radius: 5px;
+    }
+
+    .container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container .txt {
+        position: relative;
+        color: #0d1416;
+        font-size: 50px;
+        font-weight: 600px;
+        text-shadow: 0px 0px 2px rgb(97, 183, 177);
+    }
+
+    .container .texfixed {
+        color: rgb(255, 255, 255);
+        font-size: 60px;
+        font-weight: 400px;
+       
+    }
+
+    .container .dytext::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+       
+        width: 100%;
+        /* background-color:rgb(144, 161, 168);
+        border-left: 2px solid #191919;
+        animation: animate 4s steps(12) infinite; */
+    }
+
+    @keyframes animate {
+        40%,
+        60% {
+            left: 100%;
+        }
+        100% {
+            left: 0%;
+        }
+    }
+    .user-message{
+        margin-left: 100px;
+        
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="txt texfixed">Hello everyone, <br>I am</span>
+        <span class="txt dytext">ChatBot</span>
+    </div>
+
+    <div class="chatbox">
+        <h1>Ask your questions</h1>
+        <div id="chat-log"></div>
+        <div class="input">
+            <input type="text" id="input_text" placeholder="Enter your question" autofocus="" fdprocessedid="5jymzh">
+        </div>
+    </div>
+    
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+<script>
+    const text = document.querySelector('.dytext');
+        const textLoad = () => {
+            setTimeout(() => {
+                text.textContent = "IT QA";
+            }, 0);
+            setTimeout(() => {
+                text.textContent = "ChatBot";
+            }, 4000);
+            setTimeout(() => {
+                text.textContent = "your teacher";
+            }, 8000);
+            setInterval(() => {
+                textLoad();
+            }, 12000);
+        }
+        textLoad();
+
+        var userInput = document.getElementById("input_text");
+        var chatLog = document.getElementById("chat-log");
+
+        userInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+    // ... your existing code ...
+
+    function sendMessage() {
+        var message = userInput.value;
+        userInput.value = "";
+
+        // Display the user's message in the chat log
+        var userMessage = document.createElement("div");
+        userMessage.className = "user-message";
+        userMessage.textContent = message;
+        chatLog.appendChild(userMessage);
+
+        var response = "Sorry, I did not understand.";
+        var videoLink = null;
+
+        if (message in know) {
+            response = know[message].text;
+            if (know[message].videoLink) {
+                videoLink = know[message].videoLink;
+            }
+        }
+
+        // Display the bot's response in the chat log
+        var botMessage = document.createElement("div");
+        botMessage.className = "bot-message";
+    
+
+        if (videoLink) {
+            // If there is a video link associated with the response, display it
+            var youtubeLink = document.createElement("a");
+            youtubeLink.href = videoLink;
+            youtubeLink.textContent = "Click here to watch a related YouTube video on above topic";
+            youtubeLink.target = "_blank"; // Open link in a new tab
+            var responseText = document.createTextNode(response);
+            botMessage.appendChild(responseText);
+            
+            botMessage.appendChild(document.createElement("br"));
+            botMessage.appendChild(youtubeLink);
+        } else {
+            botMessage.textContent = response;
+        }
+
+        chatLog.appendChild(botMessage);
+
+        // Scroll to the bottom of the chat log
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+    
+    var know = {
+        // ... other responses ...
+
+        "Hello":{
+            text:"Hi, how can I help you?",
+            
+        },
+        "How are you?":{
+            text:"I am fine. Tell me about yourself",
+            
+        }, 
+        "Who are you?":{
+            text:"I am a Chatbot.",
+            
+        },
+        "Bye":{
+            text:"Okay! See you soon.",
+            
+        },
+        "Full form of IT /ITES?":{
+            text:"Information technology or information technology enabled services",
+            
+        },
+        "What is the full form of RAM?":{
+            text:"Random Access Memory",
+            
+        },
+        "What is Python Fundamentals?":{
+            text:"Fundamentals of Python consists of a discussion of basic building blocks of the Python programming language",
+            videoLink:"https://youtu.be/D0BLCFg_JIA"
+        },
+        "Introduction of Python":{
+            text:"Python is a widely used general-purpose, high level programming language",
+            videoLink:"https://youtu.be/NE5ItNKxLi0"
+        },
+        "Introduction to Problem Solving":{
+            text:"Problem solving is the process of identifying a problem, developing possible solution paths, and taking the appropriate course of action",
+            videoLink:"https://youtu.be/AxLPqSaMDbQ"
+        },
+        "Boolean Logic & Logic Gate":{
+            text:"",
+            videoLink:"https://youtu.be/G8a3niKYcG4"
+        },
+        "Introduction, Computer Components & Computer Organization":{
+            text:"",
+            videoLink:"https://youtu.be/YNM3F00Gloo"
+        },
+        "Who and when was Python developed?": {
+            text: "Python was developed in 1989 by Guido van Rossum.",
+            
+        },
+        "What is function?":{
+            text:"Function can be defined as a named group of instructions that accomplish a specific task when it is invoked.",
+       
+        },
+        "What is Data?":{
+            text:"Data is a collection of facts and figures or set of values in a particular format.",
+            
+        },
+        "What is Data Structure?":{
+            text:"Data structure is a way to organize data in a computers so that it can be accessed efficiently.",
+           
+        },
+        "USB stands for":{
+            text:"Universal Serial Bus",
+            
+        },
+        "What is keywords in python?":{
+            text:"Keywords are reserved word in python",
+          
+        },
+        "GPS stands for":{
+            text:"Global Positioning System.",
+            
+        },
+        "The instructions stored in ROM can be changed by the user":{
+            text:"False",
+           
+        },
+        "Cache memory is used to store application programs":{
+            text:"True",
+           
+        },
+       
+
+    }
+
+</script>
+
+
+
+    </body></html>
